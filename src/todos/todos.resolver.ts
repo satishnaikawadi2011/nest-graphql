@@ -1,4 +1,9 @@
-import { Resolver } from '@nestjs/graphql';
+import { Query, Resolver } from '@nestjs/graphql';
 
 @Resolver()
-export class TodosResolver {}
+export class TodosResolver {
+	@Query(() => String)
+	hello() {
+		return 'Hello World';
+	}
+}
