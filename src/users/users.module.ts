@@ -22,6 +22,10 @@ import { AuthService } from './auth.service';
 			UsersService,
 			UsersResolver,
 			AuthService
+		],
+	exports:
+		[
+			UsersService
 		]
 })
 export class UsersModule {}

@@ -4,6 +4,7 @@ import { TodosService } from './todos.service';
 import { TodosResolver } from './todos.resolver';
 import { Todo } from './todo.entity';
 import { JwtModule } from '@nestjs/jwt';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
 	imports:
@@ -14,7 +15,8 @@ import { JwtModule } from '@nestjs/jwt';
 			JwtModule.register({
 				secret: 'thisismysecret',
 				signOptions: { expiresIn: '7d' }
-			})
+			}),
+			UsersModule
 		],
 	providers:
 		[

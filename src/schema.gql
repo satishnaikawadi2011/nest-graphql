@@ -8,6 +8,7 @@ type User {
   email: String!
   created_at: DateTime!
   updated_at: DateTime!
+  todos: [Todo!]!
 }
 
 """
@@ -21,6 +22,8 @@ type Todo {
   description: String!
   created_at: DateTime!
   updated_at: DateTime!
+  userId: String!
+  user: User!
 }
 
 type AuthResponse {

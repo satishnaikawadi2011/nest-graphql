@@ -29,9 +29,9 @@ export class User {
 	@UpdateDateColumn()
 	updated_at: Date;
 
-	// @OneToMany(() => Todo, (todo) => todo.user)
-	// @Field((type) => [
-	// 	Todo
-	// ])
-	// todos: Todo[];
+	@OneToMany(() => Todo, (todo) => todo.user)
+	@Field((type) => [
+		Todo
+	])
+	todos: Todo[];
 }

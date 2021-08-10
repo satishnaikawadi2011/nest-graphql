@@ -26,7 +26,11 @@ export class Todo {
 	@UpdateDateColumn()
 	updated_at: Date;
 
-	// @ManyToOne(() => User, (user) => user.todos)
-	// @Field((type) => User)
-	// user: User;
+	@Field()
+	@Column()
+	userId: string;
+
+	@ManyToOne(() => User, (user) => user.todos)
+	@Field((type) => User)
+	user: User;
 }
