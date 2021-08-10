@@ -1,5 +1,6 @@
 // import { User } from 'src/users/user.entity';
 import { Field, ObjectType } from '@nestjs/graphql';
+import { User } from 'src/users/user.entity';
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @ObjectType()
@@ -26,5 +27,6 @@ export class Todo {
 	updated_at: Date;
 
 	// @ManyToOne(() => User, (user) => user.todos)
+	// @Field((type) => User)
 	// user: User;
 }

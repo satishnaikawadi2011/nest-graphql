@@ -1,16 +1,21 @@
 import { UsersService } from './users.service';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { User } from './user.entity';
 import { CreateUserInput } from './input/create-user.input';
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, UseGuards } from '@nestjs/common';
 import * as argon2 from 'argon2';
 import { UpdateUserInput } from './input/update-user.input';
+import { AuthService } from './auth.service';
+import { AuthResponse } from './types';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { SigninUserInput } from './input/signin-user.input';
 
 @Resolver()
 export class UsersResolver {
-	constructor(private usersService: UsersService) {}
+	constructor(private usersService: UsersService, private authService: AuthService) {}
 
 	@Query((returns) => User)
+	@UseGuards(AuthGuard)
 	async getUser(
 		@Args('id', { type: () => String })
 		id: string
@@ -22,18 +27,29 @@ export class UsersResolver {
 		return user;
 	}
 
-	@Mutation((returns) => User)
-	async registerUser(@Args('createUserInput') createUserInput: CreateUserInput): Promise<User> {
-		const { email, password, username } = createUserInput;
-		const isExistAlready = await this.usersService.findByEmailOrUsername(email, username);
-		if (isExistAlready.length) {
-			throw new BadRequestException('User with this email or username already exists !!');
+	@Query((returns) => User)
+	@UseGuards(AuthGuard)
+	async me(@Context('userId') userId: string): Promise<User> {
+		// console.log(userId);
+		const user = await this.usersService.findOne(userId);
+		if (!user) {
+			throw new BadRequestException('user with given id not found!');
 		}
-		const hashedPassword = await argon2.hash(password);
-		return this.usersService.create({ email, password: hashedPassword, username });
+		return user;
+	}
+
+	@Mutation((returns) => AuthResponse)
+	async registerUser(@Args('createUserInput') createUserInput: CreateUserInput): Promise<AuthResponse> {
+		return this.authService.signup(createUserInput);
+	}
+
+	@Mutation((returns) => AuthResponse)
+	async signinUser(@Args('signinUserInput') signinUserInput: SigninUserInput): Promise<AuthResponse> {
+		return this.authService.signin(signinUserInput);
 	}
 
 	@Mutation((returns) => User)
+	@UseGuards(AuthGuard)
 	async removeUser(
 		@Args('id', { type: () => String })
 		id: string
@@ -46,6 +62,7 @@ export class UsersResolver {
 	}
 
 	@Mutation((returns) => User)
+	@UseGuards(AuthGuard)
 	async updateUser(
 		@Args('id', { type: () => String })
 		id: string,

@@ -1,5 +1,6 @@
 // import { Todo } from 'src/todos/todo.entity';
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Todo } from 'src/todos/todo.entity';
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @ObjectType()
@@ -29,5 +30,8 @@ export class User {
 	updated_at: Date;
 
 	// @OneToMany(() => Todo, (todo) => todo.user)
+	// @Field((type) => [
+	// 	Todo
+	// ])
 	// todos: Todo[];
 }

@@ -13,7 +13,8 @@ import { UsersModule } from './users/users.module';
 	imports:
 		[
 			GraphQLModule.forRoot({
-				autoSchemaFile: join(process.cwd(), 'src/schema.gql')
+				autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+				context: ({ req }) => ({ headers: req.headers })
 			}),
 			TypeOrmModule.forRoot({
 				type: 'sqlite',
