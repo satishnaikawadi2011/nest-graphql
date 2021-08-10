@@ -65,3 +65,7 @@ input UpdateUserInput {
   username: String
   email: String
 }
+
+type Subscription {
+  todoAdded: Todo!
+}

@@ -14,7 +14,16 @@ import { UsersModule } from './users/users.module';
 		[
 			GraphQLModule.forRoot({
 				autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-				context: ({ req }) => ({ headers: req.headers })
+				context:
+					async ({ req, connection }) => {
+						// subscriptions
+						if (connection) {
+							return { headers: connection.context };
+						}
+						// queries and mutations
+						return { headers: req.headers };
+					},
+				installSubscriptionHandlers: true
 			}),
 			TypeOrmModule.forRoot({
 				type: 'sqlite',

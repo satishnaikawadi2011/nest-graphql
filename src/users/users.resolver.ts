@@ -10,7 +10,7 @@ import { AuthResponse } from './types';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { SigninUserInput } from './input/signin-user.input';
 
-@Resolver()
+@Resolver((of) => User)
 export class UsersResolver {
 	constructor(private usersService: UsersService, private authService: AuthService) {}
 
